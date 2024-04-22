@@ -13,6 +13,15 @@
         android:theme="@style/Theme.Project"
         tools:targetApi="31">
         <activity
+            android:name=".listActivity"
+            android:exported="false" />
+        <activity
+            android:name=".recordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".settingActivity"
+            android:exported="false" />
+        <activity
             android:name=".problemActivity"
             android:exported="false" />
         <activity

@@ -1,13 +1,13 @@
 package com.example.project;
 
 public class Problem {
-    int num;
+    int chapter;
     String question;
     String answer;
 
-    void set(int num, String question, String answer)
+    Problem(int chapter, String question, String answer)
     {
-        this.num=num;
+        this.chapter=chapter;
         this.question=question;
         this.answer=answer;
     }
