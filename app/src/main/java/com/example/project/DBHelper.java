@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -14,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,10 +55,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public List<Problem> getDataItems(){
+    public List<Problem> getDataItems(ArrayList<String> studychapter){
         List<Problem> datalist = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql="select * from Problem";
+        String sql="select * from Problem where chapter in (\"";
+        for(String tmp:studychapter)
+        {
+            sql += tmp + "\", \"";
+        }
+        sql=sql.substring(0,sql.length()-3);
+        sql += ")";
+
+        Log.d("sql",sql);
+
         Cursor cursor=db.rawQuery(sql,null);
 
         while(cursor.moveToNext()){
@@ -73,4 +80,23 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return datalist;
     }
+
+    public ArrayList<String> chapterCnt()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql="select distinct chapter from Problem";
+        Cursor cursor=db.rawQuery(sql,null);
+
+        ArrayList<String> chapterName = new ArrayList<>();
+
+        while(cursor.moveToNext()) {
+            String name = cursor.getString(0);
+            chapterName.add(name);
+        }
+        cursor.close();
+        db.close();
+
+        return chapterName;
+    }
+
 }

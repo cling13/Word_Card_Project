@@ -11,6 +11,8 @@ import android.view.InflateException;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,38 +22,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         Button btnProblem, btnSetting, btnRecord;
 
         btnProblem= findViewById(R.id.problemBtn);
         btnProblem.setOnClickListener(view -> {
-            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-            View problemlist = getLayoutInflater().inflate(R.layout.problemlist,null);
-            dlg.setView(problemlist);
+//            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+//            View problemlist = getLayoutInflater().inflate(R.layout.problemlist,null);
+//            dlg.setView(problemlist);
 
-            Intent problemActivity = new Intent(getApplicationContext(),com.example.project.problemActivity.class);
+            Intent chapterActivity = new Intent(getApplicationContext(),com.example.project.chapter.class);
 
-            Button btnWordCard, btnChapter, btnWrongAnswer;
+            startActivity(chapterActivity);
+//
+//            Button btnWordCard, btnChapter, btnWrongAnswer;
+//
+//            btnWordCard = problemlist.findViewById(R.id.btnWordCard);
+//            btnWordCard.setOnClickListener(v ->{
+//            });
 
-            btnWordCard = problemlist.findViewById(R.id.btnWordCard);
-            btnChapter = problemlist.findViewById(R.id.btnChapter);
-            btnWrongAnswer = problemlist.findViewById(R.id.btnWrongAnswer);
+//            dlg.show();
 
-            btnWordCard.setOnClickListener(v ->{
-                problemActivity.putExtra("studyMode","wordCard");
-                startActivity(problemActivity);
-            });
-
-            btnChapter.setOnClickListener(v -> {
-                problemActivity.putExtra("studyMode","chapter");
-                startActivity(problemActivity);
-            });
-
-            btnWrongAnswer.setOnClickListener(v -> {
-                problemActivity.putExtra("studyMode","wrongAnswer");
-                startActivity(problemActivity);
-            });
-
-            dlg.show();
         });
 
         btnSetting = findViewById(R.id.settingBtn);
