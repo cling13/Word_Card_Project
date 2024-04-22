@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 public class problemActivity extends AppCompatActivity{
@@ -40,6 +43,11 @@ public class problemActivity extends AppCompatActivity{
                 wrongAnswer();
                 break;
         }
+
+        Button btnAns = (Button) findViewById(R.id.btnAns);
+        btnAns.setOnClickListener(v -> {
+            btnAns.setVisibility(View.INVISIBLE);
+        });
     }
 
     void wordCard() {
@@ -47,6 +55,7 @@ public class problemActivity extends AppCompatActivity{
         textAns=findViewById(R.id.textAns);
 
         List<Problem> dataList=dbHelper.getDataItems();
+        Collections.shuffle(dataList);
 
         textQue.setText(dataList.get(0).question);
         textAns.setText(dataList.get(0).answer);

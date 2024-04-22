@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     Context context;
 
     public DBHelper(@Nullable Context context) throws IOException {
-        super(context, "Information_processing_enginear", null, 1);
+        super(context, "Problem", null, 1);
         this.context=context;
 
         copyDatabase();
@@ -38,10 +39,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void copyDatabase() throws IOException{
-        File dbFile = context.getDatabasePath("Information_processing_enginear.db");
-        if(!dbFile.exists())
-        {
-            InputStream inputStream = context.getAssets().open("Information_processing_enginear.db");
+        File dbFile = context.getDatabasePath("Problem");
+
+            InputStream inputStream = context.getAssets().open("Problem.db");
             OutputStream outputStream = new FileOutputStream(dbFile);
 
             byte[] buffer = new byte[1024];
@@ -54,43 +54,23 @@ public class DBHelper extends SQLiteOpenHelper {
             outputStream.close();
             inputStream.close();
             Log.d("tag","success");
-        }
+
     }
 
     public List<Problem> getDataItems(){
         List<Problem> datalist = new ArrayList<>();
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql="select * from Problem";
+        Cursor cursor=db.rawQuery(sql,null);
 
-        try{
-            db=getReadableDatabase();
-            cursor=db.query("Problem",null,null,null,null,null,null);
-            if(cursor!=null&&cursor.moveToFirst()){
-
-                int numColumnIndex = cursor.getColumnIndex("chapter");
-                int queColumnIndex = cursor.getColumnIndex("question");
-                int ansColumnIndex = cursor.getColumnIndex("answer");
-
-                if(numColumnIndex>=0&&queColumnIndex>=0&&ansColumnIndex>=0) {
-                    do {
-                        int num = cursor.getInt(numColumnIndex);
-                        String que = cursor.getString(queColumnIndex);
-                        String ans = cursor.getString(ansColumnIndex);
-                        Problem dataItem = new Problem(num, que, ans);
-                        datalist.add(dataItem);
-                    } while (cursor.moveToNext());
-                }
-            }
-        }catch (Exception e){
-
-        }finally {
-            if(cursor!=null){
-                cursor.close();
-            }
-            if(db!=null){
-                db.close();
-            }
+        while(cursor.moveToNext()){
+            Problem dataItem = new Problem(cursor.getInt(0),cursor.getString(1),cursor.getString(2));
+            datalist.add(dataItem);
         }
+
+        cursor.close();
+        db.close();
+
         return datalist;
     }
 }
